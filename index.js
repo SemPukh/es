@@ -41,17 +41,31 @@ app.get('/search', function (req, res) {
 app.get('/products-search', function (req, res) {
 	// declare the query object to search elastic search and return only 200 results from the first result found.
 	// also match any data where the name is like the query string sent in
+	let mathchers = []
+
+	if (req.query['name']) {
+		mathchers.push({ match: { name: req.query['name'] } })
+	}
+
+	if (req.query['year']) {
+		mathchers.push({ match: { year: req.query['year'] } })
+	}
+
+	if (req.query['type']) {
+		mathchers.push({ match: { type: req.query['type'] } })
+	}
+
 	const body = {
 		query: {
-			match: {
-				name: req.query['q']
+			bool: {
+				must: mathchers
 			}
 		}
 	}
 	// perform the actual search passing in the index, the search query and the type
 	client.search({ index: 'example-data', body, type: 'products_list' })
 		.then(results => {
-			console.log('RESULTD:', results.hits)
+			console.log('RESULT:', results.hits)
 			res.send(results.hits.hits);
 		})
 		.catch(err => {
@@ -86,7 +100,6 @@ app.delete('/products/:id', (req, res) => {
 	})
 		.catch(err => {
 			console.log('Error => ', err)
-
 		});
 })
 
@@ -95,7 +108,9 @@ app.post('/index', (req, res) => {
 		index: 'example-data',
 		refresh: true,
 		body: {
-			name: `iPhone ${+new Date()}`
+			name: `iPhone ${+new Date()}`,
+			type: 'phone',
+			year: '2021'
 		}
 	}).then((response) =>
 		res.send(response)

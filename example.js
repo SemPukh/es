@@ -19,15 +19,33 @@ const client = new elasticsearch.Client({
 const products = [
     {
         id: '1',
-        name: 'iPhone 10'
+        name: 'iPhone 10',
+        type: 'phone',
+        year: '2018'
     },
     {
         id: '2',
-        name: 'iPhone 11'
+        name: 'iPhone 11',
+        type: 'phone',
+        year: '2019'
     },
     {
         id: '3',
-        name: 'iPhone 12'
+        name: 'iPhone 12',
+        type: 'phone',
+        year: '2020'
+    },
+    {
+        id: '4',
+        name: 'Samsung galaxy s20',
+        type: 'phone',
+        year: '2020'
+    },
+    {
+        id: '5',
+        name: 'iPad pro',
+        type: 'tablet',
+        year: '2021'
     }
 ]
 
