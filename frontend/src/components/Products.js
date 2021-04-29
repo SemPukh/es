@@ -47,8 +47,6 @@ export const Products = () => {
             .catch(err => console.log('error => ', err))
     }
 
-    console.log(`search`, search)
-
     const handleCheckYear = (value) => {
         if (search.year.includes(value)) {
             setSearch({ ...search, year: search.year.filter(item => item !== value) })
@@ -65,7 +63,7 @@ export const Products = () => {
         }
     }
 
-    return <div style={{ width: '40vw', padding: '2rem' }}>
+    return <div style={{ width: '40vw', padding: '2rem', borderRight: '1px solid gray' }}>
         <h1>Products</h1>
         <form onSubmit={handleSubmit}>
             <input type="text" value={search.name} onChange={(e) => setSearch({ ...search, name: e.target.value })} />

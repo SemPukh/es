@@ -117,6 +117,50 @@ app.post('/index', (req, res) => {
 	)
 })
 
+app.get('/kubevious/search', (req, res) => {
+
+	let mathchers = []
+
+	if (req.query['dn']) {
+		mathchers.push({ match: { dn: req.query['dn'] } })
+	}
+
+	if (req.query['userId']) {
+		mathchers.push({ match: { userId: req.query['userId'] } })
+	}
+
+	if (req.query['kind']) {
+		mathchers.push({ match: { kind: req.query['kind'] } })
+	}
+
+	if (req.query['markers']) {
+		const markers = req.query['markers'].split(',')
+
+		markers.forEach(item => {
+			mathchers.push({ match: { markers: item } })
+		})
+	}
+
+	const body = {
+		query: {
+			bool: {
+				must: mathchers
+			}
+		}
+	}
+	// perform the actual search passing in the index, the search query and the type
+	client.search({ index: 'kubevious-data', body, type: 'kubevious_list' })
+		.then(results => {
+			console.log('RESULT:', results.hits)
+			res.send(results.hits.hits);
+		})
+		.catch(err => {
+			console.log(err)
+			res.send([]);
+		});
+
+})
+
 app.listen(app.get('port'), function () {
 	console.log('Express server listening on port ' + app.get('port'));
 });
