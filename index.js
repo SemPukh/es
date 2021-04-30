@@ -117,30 +117,43 @@ app.post('/index', (req, res) => {
 	)
 })
 
-app.get('/kubevious/search', (req, res) => {
+app.post('/kubevious/search', (req, res) => {
 
 	let mathchers = []
 
-	if (req.query['dn']) {
-		mathchers.push({ match: { dn: req.query['dn'] } })
+	if (req.body['dn']) {
+		mathchers.push({ match: { dn: req.body['dn'] } })
 	}
 
-	if (req.query['userId']) {
-		mathchers.push({ match: { userId: req.query['userId'] } })
+	if (req.body['userId']) {
+		mathchers.push({ match: { userId: req.body['userId'] } })
 	}
 
-	if (req.query['kind']) {
-		mathchers.push({ match: { kind: req.query['kind'] } })
+	if (req.body['kind']) {
+		mathchers.push({ match: { kind: req.body['kind'] } })
 	}
 
-	if (req.query['markers']) {
-		const markers = req.query['markers'].split(',')
-
-		markers.forEach(item => {
+	if (req.body['markers']) {
+		req.body['markers'].forEach(item => {
 			mathchers.push({ match: { markers: item } })
 		})
 	}
 
+	if (req.body['labels']) {
+		req.body['labels'].forEach(item => {
+			mathchers.push({ match: { [`labels.${item.label}`]: item.value } })
+		})
+	}
+
+	if (req.body['hasWarns']) {
+		mathchers.push({ match: { hasWarnings: req.body['hasWarns'].toString() } })
+	}
+
+	if (req.body['hasErrors']) {
+		mathchers.push({ match: { hasErrors: req.body['hasErrors'].toString() } })
+	}
+
+	console.log('matchers => ', mathchers, '\n')
 	const body = {
 		query: {
 			bool: {

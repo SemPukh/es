@@ -22,25 +22,36 @@ const data = [
         userId: "1",
         dn: "node-dn",
         kind: "node",
-        markers: ['m1', 'm2', 'm3']
+        markers: ['m1', 'm2', 'm3'],
+        labels: [{
+            label1: 'some value'
+        }],
+        hasErrors: true,
+        hasWarnings: false
     },
     {
         userId: "2",
         dn: "pod-dn",
         kind: "pod",
-        markers: ['m1', 'm3']
+        markers: ['m1', 'm3'],
+        hasErrors: false,
+        hasWarnings: true
     },
     {
         userId: "3",
         dn: "service-dn",
         kind: "service",
-        markers: []
+        markers: [],
+        hasErrors: false,
+        hasWarnings: false
     },
     {
         userId: "4",
         dn: "application-dn",
         kind: "application",
-        markers: ['m1', 'm2']
+        markers: ['m1', 'm2'],
+        hasErrors: true,
+        hasWarnings: true
     }
 ]
 
